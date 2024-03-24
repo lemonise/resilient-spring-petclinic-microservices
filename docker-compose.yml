@@ -33,6 +33,9 @@ services:
         condition: service_healthy
     ports:
      - 8761:8761
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://tracing-server:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
 
   customers-service:
     image: springcommunity/spring-petclinic-customers-service
@@ -48,6 +51,9 @@ services:
         condition: service_healthy
     ports:
     - 8081:8081
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://tracing-server:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
 
   visits-service:
     image: springcommunity/spring-petclinic-visits-service
@@ -63,6 +69,9 @@ services:
         condition: service_healthy
     ports:
      - 8082:8082
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://tracing-server:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
 
   vets-service:
     image: springcommunity/spring-petclinic-vets-service
@@ -78,6 +87,9 @@ services:
         condition: service_healthy
     ports:
      - 8083:8083
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://tracing-server:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
 
   api-gateway:
     image: springcommunity/spring-petclinic-api-gateway
@@ -93,6 +105,9 @@ services:
         condition: service_healthy
     ports:
      - 8080:8080
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT:  http://tracing-server:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
 
   tracing-server:
     image: openzipkin/zipkin
@@ -103,6 +118,8 @@ services:
           memory: 512M
     environment:
     - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom
+    - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://tracing-server:9411/api/v2/spans
+    - CONFIG_SERVER_URL=http://config-server:8888
     ports:
      - 9411:9411
 
@@ -120,6 +137,9 @@ services:
         condition: service_healthy
     ports:
      - 9090:9090
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://tracing-server:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
 
   ## Grafana / Prometheus
 
@@ -132,6 +152,9 @@ services:
           memory: 256M
     ports:
     - 3000:3000
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://tracing-server:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
 
   prometheus-server:
     build: ./docker/prometheus
@@ -142,3 +165,7 @@ services:
           memory: 256M
     ports:
     - 9091:9090
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://tracing-server:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
+
